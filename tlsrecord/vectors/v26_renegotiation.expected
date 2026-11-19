@@ -1,0 +1,4 @@
+record type=handshake(22) ver=0x0303 len=12 offset=0
+result=renegotiation_rejected code=10 detail=22
+stats records=1 hs_messages=0 fragments=0 reordered=0 duplicates=0 dup_bytes=0 alerts=0 app_bytes=0
+http=none

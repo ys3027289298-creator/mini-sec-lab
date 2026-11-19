@@ -1,0 +1,3 @@
+result=truncated_stream code=13 detail=3
+stats records=0 hs_messages=0 fragments=0 reordered=0 duplicates=0 dup_bytes=0 alerts=0 app_bytes=0
+http=none

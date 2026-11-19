@@ -1,0 +1,6 @@
+record type=handshake(22) ver=0x0303 len=59 offset=0
+  fragment hs_type=22 hs_len=40 seq=0 frag_off=0 frag_len=20
+  fragment hs_type=22 hs_len=40 seq=0 frag_off=25 frag_len=15
+result=handshake_reorder code=8 detail=25
+stats records=1 hs_messages=0 fragments=2 reordered=1 duplicates=0 dup_bytes=0 alerts=0 app_bytes=0
+http=none

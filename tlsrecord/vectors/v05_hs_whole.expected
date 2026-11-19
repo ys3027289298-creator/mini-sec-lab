@@ -1,0 +1,5 @@
+record type=handshake(22) ver=0x0303 len=52 offset=0
+  fragment hs_type=22 hs_len=40 seq=0 frag_off=0 frag_len=40
+result=ok
+stats records=1 hs_messages=1 fragments=1 reordered=0 duplicates=0 dup_bytes=0 alerts=0 app_bytes=0
+http=none

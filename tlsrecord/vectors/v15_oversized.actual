@@ -1,0 +1,4 @@
+record type=application_data(23) ver=0x0303 len=16385 offset=0
+result=record_too_large code=1 detail=16385
+stats records=0 hs_messages=0 fragments=0 reordered=0 duplicates=0 dup_bytes=0 alerts=0 app_bytes=0
+http=none
