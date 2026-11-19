@@ -1,0 +1,11 @@
+{
+  "case": "dup_cl_rejected",
+  "component": "reqguard",
+  "invariant": "reject-duplicate-content-length",
+  "steps": [
+    {
+      "send": {"op": "parse", "request": "POST /a HTTP/1.1\r\nContent-Length: 5\r\nContent-Length: 6\r\n\r\n"},
+      "expect": {"status": "dup_content_length"}
+    }
+  ]
+}

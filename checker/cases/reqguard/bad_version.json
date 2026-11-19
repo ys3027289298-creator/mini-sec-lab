@@ -1,0 +1,11 @@
+{
+  "case": "bad_version",
+  "component": "reqguard",
+  "invariant": "reject-bad-version",
+  "steps": [
+    {
+      "send": {"op": "parse", "request": "GET /a HTTP/2.0\r\n\r\n"},
+      "expect": {"status": "bad_version"}
+    }
+  ]
+}

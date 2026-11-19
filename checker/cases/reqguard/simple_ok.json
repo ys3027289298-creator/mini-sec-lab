@@ -1,0 +1,11 @@
+{
+  "case": "simple_ok",
+  "component": "reqguard",
+  "invariant": "accept-valid-request",
+  "steps": [
+    {
+      "send": {"op": "parse", "request": "GET /a HTTP/1.1\r\nHost: x\r\n\r\n"},
+      "expect": {"status": "ok", "header_count": 1}
+    }
+  ]
+}

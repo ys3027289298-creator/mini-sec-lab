@@ -1,0 +1,11 @@
+{
+  "case": "obs_fold_rejected",
+  "component": "reqguard",
+  "invariant": "reject-obs-fold",
+  "steps": [
+    {
+      "send": {"op": "parse", "request": "GET /a HTTP/1.1\r\nX: a\r\n b\r\n\r\n"},
+      "expect": {"status": "obs_fold"}
+    }
+  ]
+}

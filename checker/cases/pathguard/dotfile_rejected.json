@@ -1,0 +1,8 @@
+{
+  "case": "dotfile_rejected",
+  "component": "pathguard",
+  "invariant": "reject-dot-segment",
+  "steps": [
+    {"send": {"op": "check", "path": "a/./b"}, "expect": {"status": "dotfile"}}
+  ]
+}

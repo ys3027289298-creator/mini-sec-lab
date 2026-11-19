@@ -1,0 +1,6 @@
+# checker build artifacts
+checker/*_drv
+# component self-test binaries
+reqguard/reqguard
+pathguard/pathguard
+tokenauth/tokenauth

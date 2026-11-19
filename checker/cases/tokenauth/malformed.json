@@ -1,0 +1,25 @@
+{
+  "case": "malformed",
+  "component": "tokenauth",
+  "invariant": "reject-malformed-token",
+  "steps": [
+    {
+      "send": {
+        "op": "init",
+        "key_hex": "3031323334353637383961626364656630313233343536373839616263646566",
+        "ttl": 300,
+        "skew": 5
+      }
+    },
+    {
+      "send": {
+        "op": "verify",
+        "token": "garbage",
+        "now": 1000
+      },
+      "expect": {
+        "status": "malformed"
+      }
+    }
+  ]
+}

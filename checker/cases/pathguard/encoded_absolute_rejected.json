@@ -1,0 +1,16 @@
+{
+  "case": "encoded_absolute_rejected",
+  "component": "pathguard",
+  "invariant": "reject-absolute-path",
+  "steps": [
+    {
+      "send": {
+        "op": "check",
+        "path": "%2fetc/passwd"
+      },
+      "expect": {
+        "status": "absolute"
+      }
+    }
+  ]
+}

@@ -1,0 +1,130 @@
+{
+  "reqguard": {
+    "accept-valid-request": {
+      "kind": "accept",
+      "description": "合法 HTTP/1.1 请求必须被接受（普通 GET、带 Content-Length 或 Transfer-Encoding 的请求）"
+    },
+    "reject-cl-te": {
+      "kind": "reject",
+      "status": "cl_te_conflict",
+      "description": "同时带 Content-Length 与 Transfer-Encoding 的请求（CL+TE 走私）必须被拒绝"
+    },
+    "reject-duplicate-content-length": {
+      "kind": "reject",
+      "status": "dup_content_length",
+      "description": "重复 Content-Length 头必须被拒绝，防止前后端解析分歧"
+    },
+    "reject-obs-fold": {
+      "kind": "reject",
+      "status": "obs_fold",
+      "description": "废弃的折行头（obs-fold）必须被拒绝"
+    },
+    "reject-bad-content-length": {
+      "kind": "reject",
+      "status": "bad_content_length",
+      "description": "非法 Content-Length 值必须被拒绝"
+    },
+    "reject-bad-version": {
+      "kind": "reject",
+      "status": "bad_version",
+      "description": "非 HTTP/1.0/1.1 的版本必须被拒绝"
+    },
+    "reject-bad-target": {
+      "kind": "reject",
+      "status": "bad_target",
+      "description": "非法请求目标（非以 / 开头、含控制字符）必须被拒绝"
+    },
+    "reject-control-char": {
+      "kind": "reject",
+      "status": "control_char",
+      "description": "请求中的原始控制字符必须被拒绝"
+    },
+    "reject-header-syntax": {
+      "kind": "reject",
+      "status": "bad_header",
+      "description": "语法非法的头字段（无冒号、名含非 token 字符）必须被拒绝"
+    },
+    "reject-oversized-request": {
+      "kind": "reject",
+      "status": "too_large",
+      "description": "超过缓冲区上限的请求必须被拒绝"
+    }
+  },
+  "pathguard": {
+    "accept-valid-relative-path": {
+      "kind": "accept",
+      "description": "合法的相对路径必须被接受"
+    },
+    "reject-empty-path": {
+      "kind": "reject",
+      "status": "empty",
+      "description": "空路径必须被拒绝"
+    },
+    "reject-absolute-path": {
+      "kind": "reject",
+      "status": "absolute",
+      "description": "绝对路径（含百分号编码伪装的 /）必须被拒绝，调用方只能给相对名"
+    },
+    "reject-traversal": {
+      "kind": "reject",
+      "status": "traversal",
+      "description": "目录穿越（.. 段，含 %2e%2e、%2f 编码伪装）必须被拒绝"
+    },
+    "reject-control-char": {
+      "kind": "reject",
+      "status": "control",
+      "description": "路径中的控制字节（含解码后出现的）必须被拒绝"
+    },
+    "reject-too-long-component": {
+      "kind": "reject",
+      "status": "too_long",
+      "description": "超长路径段必须被拒绝"
+    },
+    "reject-too-deep": {
+      "kind": "reject",
+      "status": "too_deep",
+      "description": "超过深度上限的路径必须被拒绝"
+    },
+    "reject-bad-percent-encoding": {
+      "kind": "reject",
+      "status": "encoded",
+      "description": "格式错误的百分号编码必须被拒绝"
+    },
+    "reject-dot-segment": {
+      "kind": "reject",
+      "status": "dotfile",
+      "description": "单点段（.）必须被拒绝"
+    },
+    "reject-backslash": {
+      "kind": "reject",
+      "status": "backslash",
+      "description": "反斜杠必须被拒绝，防止 Windows 分隔符混淆"
+    }
+  },
+  "tokenauth": {
+    "accept-valid-token": {
+      "kind": "accept",
+      "description": "合法令牌（含轮转前旧密钥签发的、不同 nonce 的）必须通过验证"
+    },
+    "reject-replay": {
+      "kind": "reject",
+      "status": "replay",
+      "description": "同一 nonce 的令牌重放必须被拒绝"
+    },
+    "reject-bad-signature": {
+      "kind": "reject",
+      "status": "bad_sig",
+      "description": "签名被篡改的令牌必须被拒绝"
+    },
+    "reject-expired": {
+      "kind": "reject",
+      "status": "expired",
+      "description": "超过 TTL（含时钟偏差窗口）的令牌必须被拒绝"
+    },
+    "reject-malformed-token": {
+      "kind": "reject",
+      "status": "malformed",
+      "description": "结构畸形的令牌必须被拒绝"
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "case": "encoded_rejected",
+  "component": "pathguard",
+  "invariant": "reject-traversal",
+  "steps": [
+    {"send": {"op": "check", "path": "%2e%2e/x"}, "expect": {"status": "traversal"}}
+  ]
+}

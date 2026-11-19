@@ -1,0 +1,8 @@
+{
+  "case": "traversal_rejected",
+  "component": "pathguard",
+  "invariant": "reject-traversal",
+  "steps": [
+    {"send": {"op": "check", "path": "../x"}, "expect": {"status": "traversal"}}
+  ]
+}

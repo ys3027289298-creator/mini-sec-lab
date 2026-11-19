@@ -1,0 +1,16 @@
+{
+  "case": "too_long_rejected",
+  "component": "pathguard",
+  "invariant": "reject-too-long-component",
+  "steps": [
+    {
+      "send": {
+        "op": "check",
+        "path": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "expect": {
+        "status": "too_long"
+      }
+    }
+  ]
+}

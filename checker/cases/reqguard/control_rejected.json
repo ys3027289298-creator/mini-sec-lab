@@ -1,0 +1,11 @@
+{
+  "case": "control_rejected",
+  "component": "reqguard",
+  "invariant": "reject-control-char",
+  "steps": [
+    {
+      "send": {"op": "parse", "request": "GET /a\u0001 HTTP/1.1\r\n\r\n"},
+      "expect": {"status": "control_char"}
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "case": "control_rejected",
+  "component": "pathguard",
+  "invariant": "reject-control-char",
+  "steps": [
+    {
+      "send": {
+        "op": "check",
+        "path": "a\u0001b"
+      },
+      "expect": {
+        "status": "control"
+      }
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "case": "too_deep_rejected",
+  "component": "pathguard",
+  "invariant": "reject-too-deep",
+  "steps": [
+    {"send": {"op": "check", "path": "a/b/c/d/e/f/g/h/i"}, "expect": {"status": "too_deep"}}
+  ]
+}

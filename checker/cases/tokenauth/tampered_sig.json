@@ -1,0 +1,44 @@
+{
+  "case": "tampered_sig",
+  "component": "tokenauth",
+  "invariant": "reject-bad-signature",
+  "steps": [
+    {
+      "send": {
+        "op": "init",
+        "key_hex": "3031323334353637383961626364656630313233343536373839616263646566",
+        "ttl": 300,
+        "skew": 5
+      }
+    },
+    {
+      "id": "good",
+      "send": {
+        "op": "build",
+        "uid": "u1",
+        "now": 1000,
+        "nonce": 43
+      }
+    },
+    {
+      "id": "bad",
+      "send": {
+        "op": "flip_first_char",
+        "token": "$good.token"
+      },
+      "expect": {
+        "status": "ok"
+      }
+    },
+    {
+      "send": {
+        "op": "verify",
+        "token": "$bad.token",
+        "now": 1000
+      },
+      "expect": {
+        "status": "bad_sig"
+      }
+    }
+  ]
+}

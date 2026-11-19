@@ -1,0 +1,8 @@
+{
+  "case": "backslash_rejected",
+  "component": "pathguard",
+  "invariant": "reject-backslash",
+  "steps": [
+    {"send": {"op": "check", "path": "a\\b"}, "expect": {"status": "backslash"}}
+  ]
+}

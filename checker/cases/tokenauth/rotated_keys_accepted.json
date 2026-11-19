@@ -1,0 +1,62 @@
+{
+  "case": "rotated_keys_accepted",
+  "component": "tokenauth",
+  "invariant": "accept-valid-token",
+  "steps": [
+    {
+      "send": {
+        "op": "init",
+        "key_hex": "3031323334353637383961626364656630313233343536373839616263646566",
+        "ttl": 300,
+        "skew": 5
+      }
+    },
+    {
+      "id": "old",
+      "send": {
+        "op": "build",
+        "uid": "u3",
+        "now": 1000,
+        "nonce": 45
+      }
+    },
+    {
+      "send": {
+        "op": "rotate",
+        "key_hex": "6666666666666666666666666666666666666666666666666666666666666666"
+      },
+      "expect": {
+        "status": "ok"
+      }
+    },
+    {
+      "id": "new",
+      "send": {
+        "op": "build",
+        "uid": "u2",
+        "now": 1000,
+        "nonce": 44
+      }
+    },
+    {
+      "send": {
+        "op": "verify",
+        "token": "$new.token",
+        "now": 1000
+      },
+      "expect": {
+        "status": "ok"
+      }
+    },
+    {
+      "send": {
+        "op": "verify",
+        "token": "$old.token",
+        "now": 1000
+      },
+      "expect": {
+        "status": "ok"
+      }
+    }
+  ]
+}

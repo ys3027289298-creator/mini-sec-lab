@@ -176,6 +176,7 @@ static ReqErr parse_request(const char* buf, size_t len, Request* req) {
     return REQ_OK;
 }
 
+#ifdef SELF_TEST
 static int failures = 0;
 static void check(const char* name, int ok) {
     printf("%s=%d\n", name, ok ? 1 : 0);
@@ -207,3 +208,4 @@ int main(void) {
     printf("all_ok=%d\n", failures == 0);
     return failures == 0 ? 0 : 1;
 }
+#endif /* SELF_TEST */

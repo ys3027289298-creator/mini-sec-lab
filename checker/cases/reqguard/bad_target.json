@@ -1,0 +1,11 @@
+{
+  "case": "bad_target",
+  "component": "reqguard",
+  "invariant": "reject-bad-target",
+  "steps": [
+    {
+      "send": {"op": "parse", "request": "GET a HTTP/1.1\r\n\r\n"},
+      "expect": {"status": "bad_target"}
+    }
+  ]
+}

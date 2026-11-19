@@ -1,0 +1,11 @@
+{
+  "case": "post_cl_ok",
+  "component": "reqguard",
+  "invariant": "accept-valid-request",
+  "steps": [
+    {
+      "send": {"op": "parse", "request": "POST /a HTTP/1.1\r\nContent-Length: 5\r\n\r\n"},
+      "expect": {"status": "ok", "content_length": 5}
+    }
+  ]
+}

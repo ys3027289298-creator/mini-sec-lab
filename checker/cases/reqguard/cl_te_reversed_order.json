@@ -1,0 +1,16 @@
+{
+  "case": "cl_te_reversed_order",
+  "component": "reqguard",
+  "invariant": "reject-cl-te",
+  "steps": [
+    {
+      "send": {
+        "op": "parse",
+        "request": "POST /a HTTP/1.1\r\nTransfer-Encoding: chunked\r\nContent-Length: 5\r\n\r\n"
+      },
+      "expect": {
+        "status": "cl_te_conflict"
+      }
+    }
+  ]
+}

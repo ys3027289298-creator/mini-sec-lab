@@ -1,0 +1,8 @@
+{
+  "case": "single_ok",
+  "component": "pathguard",
+  "invariant": "accept-valid-relative-path",
+  "steps": [
+    {"send": {"op": "check", "path": "file.txt"}, "expect": {"status": "ok"}}
+  ]
+}

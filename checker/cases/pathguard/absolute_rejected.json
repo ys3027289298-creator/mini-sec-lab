@@ -1,0 +1,8 @@
+{
+  "case": "absolute_rejected",
+  "component": "pathguard",
+  "invariant": "reject-absolute-path",
+  "steps": [
+    {"send": {"op": "check", "path": "/etc/passwd"}, "expect": {"status": "absolute"}}
+  ]
+}

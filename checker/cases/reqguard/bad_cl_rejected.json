@@ -1,0 +1,11 @@
+{
+  "case": "bad_cl_rejected",
+  "component": "reqguard",
+  "invariant": "reject-bad-content-length",
+  "steps": [
+    {
+      "send": {"op": "parse", "request": "POST /a HTTP/1.1\r\nContent-Length: -1\r\n\r\n"},
+      "expect": {"status": "bad_content_length"}
+    }
+  ]
+}

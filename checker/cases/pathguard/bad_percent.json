@@ -1,0 +1,8 @@
+{
+  "case": "bad_percent",
+  "component": "pathguard",
+  "invariant": "reject-bad-percent-encoding",
+  "steps": [
+    {"send": {"op": "check", "path": "a%zz"}, "expect": {"status": "encoded"}}
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "case": "empty_rejected",
+  "component": "pathguard",
+  "invariant": "reject-empty-path",
+  "steps": [
+    {"send": {"op": "check", "path": ""}, "expect": {"status": "empty"}}
+  ]
+}
