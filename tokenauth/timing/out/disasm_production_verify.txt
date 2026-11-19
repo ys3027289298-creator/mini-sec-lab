@@ -1,0 +1,204 @@
+0000000000001720 <verify.constprop.0>:
+    1720:	push   r15
+    1722:	push   r14
+    1724:	push   r13
+    1726:	push   r12
+    1728:	mov    r12,rsi
+    172b:	push   rbp
+    172c:	mov    rbp,rdx
+    172f:	push   rbx
+    1730:	mov    rbx,rdi
+    1733:	mov    rdi,rsi
+    1736:	sub    rsp,0x2f8
+    173d:	mov    rax,QWORD PTR fs:0x28
+    1746:	mov    QWORD PTR [rsp+0x2e8],rax
+    174e:	xor    eax,eax
+    1750:	call   1160 <strlen@plt>
+    1755:	cmp    rax,0xff
+    175b:	jbe    178b <verify.constprop.0+0x6b>
+    175d:	mov    eax,0x1
+    1762:	mov    rdx,QWORD PTR [rsp+0x2e8]
+    176a:	sub    rdx,QWORD PTR fs:0x28
+    1773:	jne    1a2e <verify.constprop.0+0x30e>
+    1779:	add    rsp,0x2f8
+    1780:	pop    rbx
+    1781:	pop    rbp
+    1782:	pop    r12
+    1784:	pop    r13
+    1786:	pop    r14
+    1788:	pop    r15
+    178a:	ret
+    178b:	lea    r15,[rsp+0xe0]
+    1793:	add    rax,0x1
+    1797:	mov    rdi,r15
+    179a:	cmp    eax,0x8
+    179d:	jb     17ad <verify.constprop.0+0x8d>
+    179f:	mov    ecx,eax
+    17a1:	mov    rsi,r12
+    17a4:	shr    ecx,0x3
+    17a7:	rep movs QWORD PTR es:[rdi],QWORD PTR ds:[rsi]
+    17aa:	mov    r12,rsi
+    17ad:	xor    edx,edx
+    17af:	test   al,0x4
+    17b1:	je     17be <verify.constprop.0+0x9e>
+    17b3:	mov    edx,DWORD PTR [r12]
+    17b7:	mov    DWORD PTR [rdi],edx
+    17b9:	mov    edx,0x4
+    17be:	test   al,0x2
+    17c0:	je     17cf <verify.constprop.0+0xaf>
+    17c2:	movzx  ecx,WORD PTR [r12+rdx*1]
+    17c7:	mov    WORD PTR [rdi+rdx*1],cx
+    17cb:	add    rdx,0x2
+    17cf:	test   al,0x1
+    17d1:	je     17db <verify.constprop.0+0xbb>
+    17d3:	movzx  eax,BYTE PTR [r12+rdx*1]
+    17d8:	mov    BYTE PTR [rdi+rdx*1],al
+    17db:	mov    esi,0x2e
+    17e0:	mov    rdi,r15
+    17e3:	call   1170 <strrchr@plt>
+    17e8:	mov    r14,rax
+    17eb:	test   rax,rax
+    17ee:	je     175d <verify.constprop.0+0x3d>
+    17f4:	mov    BYTE PTR [rax],0x0
+    17f7:	lea    rdi,[rax+0x1]
+    17fb:	call   1160 <strlen@plt>
+    1800:	cmp    rax,0x40
+    1804:	jne    175d <verify.constprop.0+0x3d>
+    180a:	mov    esi,0x2e
+    180f:	mov    rdi,r15
+    1812:	call   1170 <strrchr@plt>
+    1817:	mov    r12,rax
+    181a:	test   rax,rax
+    181d:	je     175d <verify.constprop.0+0x3d>
+    1823:	mov    BYTE PTR [rax],0x0
+    1826:	mov    esi,0x2e
+    182b:	mov    rdi,r15
+    182e:	call   1170 <strrchr@plt>
+    1833:	test   rax,rax
+    1836:	je     175d <verify.constprop.0+0x3d>
+    183c:	mov    BYTE PTR [rax],0x0
+    183f:	lea    rsi,[rax+0x1]
+    1843:	lea    rax,[rsp+0x10]
+    1848:	mov    edx,0x1f
+    184d:	mov    rdi,rax
+    1850:	mov    QWORD PTR [rsp],rax
+    1854:	call   11b0 <strncpy@plt>
+    1859:	lea    rax,[rsp+0x30]
+    185e:	lea    rsi,[r12+0x1]
+    1863:	mov    edx,0x1f
+    1868:	mov    r13,rax
+    186b:	mov    rdi,rax
+    186e:	mov    BYTE PTR [rsp+0x2f],0x0
+    1873:	lea    r12,[rsp+0x1e0]
+    187b:	mov    QWORD PTR [rsp+0x8],rax
+    1880:	call   11b0 <strncpy@plt>
+    1885:	mov    BYTE PTR [rsp+0x4f],0x0
+    188a:	mov    r9,r15
+    188d:	xor    eax,eax
+    188f:	push   r13
+    1891:	mov    edx,0x2
+    1896:	mov    ecx,0x100
+    189b:	mov    rdi,r12
+    189e:	push   QWORD PTR [rsp+0x8]
+    18a2:	lea    r8,[rip+0x767]        # 2010 <_IO_stdin_used+0x10>
+    18a9:	mov    esi,0x100
+    18ae:	xor    r13d,r13d
+    18b1:	call   11e0 <__snprintf_chk@plt>
+    18b6:	pop    rax
+    18b7:	cmp    DWORD PTR [rbx+0x50],0x0
+    18bb:	pop    rdx
+    18bc:	lea    r15,[rsp+0x50]
+    18c1:	jle    1955 <verify.constprop.0+0x235>
+    18c7:	nop    WORD PTR [rax+rax*1+0x0]
+    18d0:	mov    rdi,r13
+    18d3:	mov    rsi,QWORD PTR [rbx+r13*8+0x40]
+    18d8:	mov    rcx,r15
+    18db:	mov    rdx,r12
+    18de:	shl    rdi,0x5
+    18e2:	add    rdi,rbx
+    18e5:	call   1610 <hmac_hex>
+    18ea:	xor    eax,eax
+    18ec:	pxor   xmm0,xmm0
+    18f0:	movdqu xmm1,XMMWORD PTR [r14+rax*1+0x1]
+    18f7:	pxor   xmm1,XMMWORD PTR [r15+rax*1]
+    18fd:	add    rax,0x10
+    1901:	por    xmm0,xmm1
+    1905:	cmp    rax,0x40
+    1909:	jne    18f0 <verify.constprop.0+0x1d0>
+    190b:	movdqa xmm1,xmm0
+    190f:	psrldq xmm1,0x8
+    1914:	por    xmm0,xmm1
+    1918:	movdqa xmm1,xmm0
+    191c:	psrldq xmm1,0x4
+    1921:	por    xmm0,xmm1
+    1925:	movdqa xmm1,xmm0
+    1929:	psrldq xmm1,0x2
+    192e:	por    xmm0,xmm1
+    1932:	movdqa xmm1,xmm0
+    1936:	psrldq xmm1,0x1
+    193b:	por    xmm0,xmm1
+    193f:	movd   eax,xmm0
+    1943:	test   al,al
+    1945:	je     195f <verify.constprop.0+0x23f>
+    1947:	add    r13,0x1
+    194b:	cmp    DWORD PTR [rbx+0x50],r13d
+    194f:	jg     18d0 <verify.constprop.0+0x1b0>
+    1955:	mov    eax,0x2
+    195a:	jmp    1762 <verify.constprop.0+0x42>
+    195f:	mov    rdi,QWORD PTR [rsp]
+    1963:	mov    edx,0xa
+    1968:	xor    esi,esi
+    196a:	call   1180 <strtol@plt>
+    196f:	mov    rdi,QWORD PTR [rsp+0x8]
+    1974:	mov    edx,0xa
+    1979:	xor    esi,esi
+    197b:	mov    r12,rax
+    197e:	call   11c0 <strtoull@plt>
+    1983:	mov    rdi,rax
+    1986:	mov    rax,QWORD PTR [rbx+0x60]
+    198a:	lea    rdx,[r12+rax*1]
+    198e:	cmp    rdx,rbp
+    1991:	jl     1a24 <verify.constprop.0+0x304>
+    1997:	sub    r12,QWORD PTR [rbx+0x58]
+    199b:	add    rax,rbp
+    199e:	cmp    r12,rax
+    19a1:	jg     1a10 <verify.constprop.0+0x2f0>
+    19a3:	mov    r10d,DWORD PTR [rbx+0x206c]
+    19aa:	mov    r8d,DWORD PTR [rbx+0x2068]
+    19b1:	xor    ecx,ecx
+    19b3:	mov    esi,0x400
+    19b8:	lea    r9d,[r10+0x3ff]
+    19bf:	jmp    19d6 <verify.constprop.0+0x2b6>
+    19c1:	mov    eax,r9d
+    19c4:	sub    eax,ecx
+    19c6:	cdq
+    19c7:	idiv   esi
+    19c9:	movsxd rdx,edx
+    19cc:	cmp    rdi,QWORD PTR [rbx+rdx*8+0x68]
+    19d1:	je     1a1a <verify.constprop.0+0x2fa>
+    19d3:	add    ecx,0x1
+    19d6:	cmp    ecx,r8d
+    19d9:	jl     19c1 <verify.constprop.0+0x2a1>
+    19db:	movsxd rax,r10d
+    19de:	mov    ecx,0x400
+    19e3:	mov    QWORD PTR [rbx+rax*8+0x68],rdi
+    19e8:	lea    eax,[r10+0x1]
+    19ec:	cdq
+    19ed:	idiv   ecx
+    19ef:	mov    DWORD PTR [rbx+0x206c],edx
+    19f5:	cmp    r8d,0x3ff
+    19fc:	jg     1a09 <verify.constprop.0+0x2e9>
+    19fe:	add    r8d,0x1
+    1a02:	mov    DWORD PTR [rbx+0x2068],r8d
+    1a09:	xor    eax,eax
+    1a0b:	jmp    1762 <verify.constprop.0+0x42>
+    1a10:	mov    eax,0x4
+    1a15:	jmp    1762 <verify.constprop.0+0x42>
+    1a1a:	mov    eax,0x5
+    1a1f:	jmp    1762 <verify.constprop.0+0x42>
+    1a24:	mov    eax,0x3
+    1a29:	jmp    1762 <verify.constprop.0+0x42>
+    1a2e:	call   11a0 <__stack_chk_fail@plt>
+    1a33:	data16 cs nop WORD PTR [rax+rax*1+0x0]
+    1a3e:	xchg   ax,ax
+

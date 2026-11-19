@@ -1,0 +1,4 @@
+rounds=1000 groups=65 (k=0..64) seed=0x123456789abcdef0
+affinity=pinned-to-cpu0
+sink_init=0
+sink_final=130306

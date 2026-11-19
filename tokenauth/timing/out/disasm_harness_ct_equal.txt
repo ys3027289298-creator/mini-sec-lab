@@ -1,0 +1,22 @@
+0000000000001640 <ct_equal>:
+    1640:	endbr64
+    1644:	test   rdx,rdx
+    1647:	je     1670 <ct_equal+0x30>
+    1649:	xor    eax,eax
+    164b:	xor    r8d,r8d
+    164e:	xchg   ax,ax
+    1650:	movzx  ecx,BYTE PTR [rdi+rax*1]
+    1654:	xor    cl,BYTE PTR [rsi+rax*1]
+    1657:	add    rax,0x1
+    165b:	or     r8d,ecx
+    165e:	cmp    rdx,rax
+    1661:	jne    1650 <ct_equal+0x10>
+    1663:	xor    eax,eax
+    1665:	test   r8b,r8b
+    1668:	sete   al
+    166b:	ret
+    166c:	nop    DWORD PTR [rax+0x0]
+    1670:	mov    eax,0x1
+    1675:	ret
+    1676:	cs nop WORD PTR [rax+rax*1+0x0]
+

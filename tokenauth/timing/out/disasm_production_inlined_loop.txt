@@ -1,0 +1,21 @@
+    18f0:	movdqu xmm1,XMMWORD PTR [r14+rax*1+0x1]
+    18f7:	pxor   xmm1,XMMWORD PTR [r15+rax*1]
+    18fd:	add    rax,0x10
+    1901:	por    xmm0,xmm1
+    1905:	cmp    rax,0x40
+    1909:	jne    18f0 <verify.constprop.0+0x1d0>
+    190b:	movdqa xmm1,xmm0
+    190f:	psrldq xmm1,0x8
+    1914:	por    xmm0,xmm1
+    1918:	movdqa xmm1,xmm0
+    191c:	psrldq xmm1,0x4
+    1921:	por    xmm0,xmm1
+    1925:	movdqa xmm1,xmm0
+    1929:	psrldq xmm1,0x2
+    192e:	por    xmm0,xmm1
+    1932:	movdqa xmm1,xmm0
+    1936:	psrldq xmm1,0x1
+    193b:	por    xmm0,xmm1
+    193f:	movd   eax,xmm0
+    1943:	test   al,al
+    1945:	je     195f <verify.constprop.0+0x23f>

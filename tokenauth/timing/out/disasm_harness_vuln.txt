@@ -1,0 +1,20 @@
+0000000000001680 <vuln_equal>:
+    1680:	endbr64
+    1684:	test   rdx,rdx
+    1687:	je     16a8 <vuln_equal+0x28>
+    1689:	xor    eax,eax
+    168b:	jmp    1699 <vuln_equal+0x19>
+    168d:	nop    DWORD PTR [rax]
+    1690:	add    rax,0x1
+    1694:	cmp    rdx,rax
+    1697:	je     16a8 <vuln_equal+0x28>
+    1699:	movzx  ecx,BYTE PTR [rsi+rax*1]
+    169d:	cmp    BYTE PTR [rdi+rax*1],cl
+    16a0:	je     1690 <vuln_equal+0x10>
+    16a2:	xor    eax,eax
+    16a4:	ret
+    16a5:	nop    DWORD PTR [rax]
+    16a8:	mov    eax,0x1
+    16ad:	ret
+    16ae:	xchg   ax,ax
+
