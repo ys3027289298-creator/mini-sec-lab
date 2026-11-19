@@ -1,0 +1,190 @@
+{
+  "corpus_size": 1754,
+  "class_counts": {
+    "agree": 1624,
+    "hole:HPE_INVALID_METHOD": 17,
+    "strict:bad_content_length": 6,
+    "strict:bad_header": 18,
+    "strict:bad_target": 7,
+    "strict:bad_transfer_encoding": 53,
+    "strict:bad_version": 3,
+    "strict:control_char": 11,
+    "strict:line_too_long": 3,
+    "strict:obs_fold": 5,
+    "strict:too_many_headers": 7
+  },
+  "coverage_matrix_cells": 56,
+  "dangerous_classes": [],
+  "minimal_samples": {
+    "hole:HPE_INVALID_METHOD": [
+      {
+        "label": "lower-method",
+        "hex": "74202f20485454502f312e310d0a483a0d0a0d0a",
+        "repr": "t / HTTP/1.1\\r\\nH:\\r\\n\\r\\n"
+      },
+      {
+        "label": "unknown-method",
+        "hex": "52202f20485454502f312e310d0a483a0d0a0d0a",
+        "repr": "R / HTTP/1.1\\r\\nH:\\r\\n\\r\\n"
+      },
+      {
+        "label": "method-pipe",
+        "hex": "54202f20485454502f312e310d0a743a0d0a0d0a",
+        "repr": "T / HTTP/1.1\\r\\nt:\\r\\n\\r\\n"
+      }
+    ],
+    "strict:bad_content_length": [
+      {
+        "label": "cl-value:b'18446744073709551615'",
+        "hex": "504f5354202f20485454502f312e310d0a743a0d0a436f6e74656e742d4c656e6774683a31383434363734343037333730393535313631350d0a0d0a",
+        "repr": "POST / HTTP/1.1\\r\\nt:\\r\\nContent-Length:18446744073709551615\\r\\n\\r\\n"
+      },
+      {
+        "label": "cl-value:b'9223372036854775808'",
+        "hex": "504f5354202f20485454502f312e310d0a743a0d0a436f6e74656e742d4c656e6774683a393232333337323033363835343737353830380d0a0d0a",
+        "repr": "POST / HTTP/1.1\\r\\nt:\\r\\nContent-Length:9223372036854775808\\r\\n\\r\\n"
+      },
+      {
+        "label": "fuzz:20261119:356",
+        "hex": "504f5354202f20485454502f312e310d0a436f6e74656e742d4c656e6774683a31383434363734343037333730393535313631350d0a0d0a",
+        "repr": "POST / HTTP/1.1\\r\\nContent-Length:18446744073709551615\\r\\n\\r\\n"
+      }
+    ],
+    "strict:bad_header": [
+      {
+        "label": "cl-name:b'Content Length'",
+        "hex": "504f5354202f20485454502f312e310d0a3a0d0a743a0d0a0d0a",
+        "repr": "POST / HTTP/1.1\\r\\n:\\r\\nt:\\r\\n\\r\\n"
+      },
+      {
+        "label": "cl-name-te:b'Content Length'",
+        "hex": "504f5354202f20485454502f312e310d0a74203a0d0a0d0a",
+        "repr": "POST / HTTP/1.1\\r\\nt :\\r\\n\\r\\n"
+      },
+      {
+        "label": "te-name:b'Transfer Encoding'",
+        "hex": "504f5354202f20485454502f312e310d0a73203a0d0a0d0a",
+        "repr": "POST / HTTP/1.1\\r\\ns :\\r\\n\\r\\n"
+      }
+    ],
+    "strict:bad_target": [
+      {
+        "label": "double-space-1",
+        "hex": "474554202f0d0a3a0d0a0d0a",
+        "repr": "GET /\\r\\n:\\r\\n\\r\\n"
+      },
+      {
+        "label": "absolute-target",
+        "hex": "47455420703a2f2f0d0a3a0d0a0d0a",
+        "repr": "GET p://\\r\\n:\\r\\n\\r\\n"
+      },
+      {
+        "label": "asterisk-target",
+        "hex": "4f5054494f4e53202a0d0a3a0d0a0d0a",
+        "repr": "OPTIONS *\\r\\n:\\r\\n\\r\\n"
+      }
+    ],
+    "strict:bad_transfer_encoding": [
+      {
+        "label": "matrix:cl-absent+te-empty",
+        "hex": "504f5354202f20485454502f312e310d0a743a0d0a5472616e736665722d456e636f64696e673a0d0a0d0a",
+        "repr": "POST / HTTP/1.1\\r\\nt:\\r\\nTransfer-Encoding:\\r\\n\\r\\n"
+      },
+      {
+        "label": "matrix:cl-leading-zero+te-empty",
+        "hex": "504f5354202f20485454502f312e310d0a683a0d0a5472616e736665722d456e636f64696e673a0d0a0d0a",
+        "repr": "POST / HTTP/1.1\\r\\nh:\\r\\nTransfer-Encoding:\\r\\n\\r\\n"
+      },
+      {
+        "label": "matrix-rev:cl-leading-zero+te-empty",
+        "hex": "504f5354202f20485454502f312e310d0a743a0d0a5472616e736665722d456e636f64696e673a0d0a3a0d0a0d0a",
+        "repr": "POST / HTTP/1.1\\r\\nt:\\r\\nTransfer-Encoding:\\r\\n:\\r\\n\\r\\n"
+      }
+    ],
+    "strict:bad_version": [
+      {
+        "label": "double-space-2",
+        "hex": "474554202f2020485454502f312e310d0a3a0d0a0d0a",
+        "repr": "GET /  HTTP/1.1\\r\\n:\\r\\n\\r\\n"
+      },
+      {
+        "label": "http09",
+        "hex": "474554202f20485454502f302e390d0a3a0d0a0d0a",
+        "repr": "GET / HTTP/0.9\\r\\n:\\r\\n\\r\\n"
+      },
+      {
+        "label": "http20",
+        "hex": "474554202f20485454502f322e300d0a3a0d0a0d0a",
+        "repr": "GET / HTTP/2.0\\r\\n:\\r\\n\\r\\n"
+      }
+    ],
+    "strict:control_char": [
+      {
+        "label": "fuzz:20261119:7",
+        "hex": "504f5354202f0a0d54",
+        "repr": "POST /\\n\\rT"
+      },
+      {
+        "label": "fuzz:20261119:116",
+        "hex": "504f5354202f0a0a",
+        "repr": "POST /\\n\\n"
+      },
+      {
+        "label": "fuzz:20261119:189",
+        "hex": "474554202f0a0d6b",
+        "repr": "GET /\\n\\rk"
+      }
+    ],
+    "strict:line_too_long": [
+      {
+        "label": "long-line",
+        "hex": "504f5354202f20485454502f312e310d0a3a207861616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161610d0a0d0a",
+        "repr": "POST / HTTP/1.1\\r\\n: xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\\r\\n\\r\\n"
+      },
+      {
+        "label": "fuzz:20261119:1000",
+        "hex": "504f5354202f20485454502f312e310d0a743a207861616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161612b616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161610d0a0d0a",
+        "repr": "POST / HTTP/1.1\\r\\nt: xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\\r\\n\\r\\n"
+      },
+      {
+        "label": "fuzz:20261119:1340",
+        "hex": "504f5354202f20485454502f312e310d0a486f73743a2078616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161615561616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161610d0a0d0a",
+        "repr": "POST / HTTP/1.1\\r\\nHost: xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaUaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\\r\\n\\r\\n"
+      }
+    ],
+    "strict:obs_fold": [
+      {
+        "label": "obs-fold-space",
+        "hex": "474554202f20485454502f312e310d0a583a610d0a200d0a0d0a",
+        "repr": "GET / HTTP/1.1\\r\\nX:a\\r\\n \\r\\n\\r\\n"
+      },
+      {
+        "label": "obs-fold-tab",
+        "hex": "474554202f20485454502f312e310d0a583a610d0a090d0a0d0a",
+        "repr": "GET / HTTP/1.1\\r\\nX:a\\r\\n\\t\\r\\n\\r\\n"
+      },
+      {
+        "label": "obs-fold-te",
+        "hex": "504f5354202f20485454502f312e310d0a673a640d0a200d0a0d0a",
+        "repr": "POST / HTTP/1.1\\r\\ng:d\\r\\n \\r\\n\\r\\n"
+      }
+    ],
+    "strict:too_many_headers": [
+      {
+        "label": "many-headers-33",
+        "hex": "504f5354202f20485454502f312e310d0a743a0d0a313a0d0a323a0d0a333a0d0a343a0d0a353a0d0a363a0d0a373a0d0a383a0d0a393a0d0a583a0d0a583a0d0a583a0d0a583a0d0a583a0d0a583a0d0a583a0d0a583a20760d0a583a20760d0a583a20760d0a583a20760d0a583a20760d0a583a20760d0a583a20760d0a583a20760d0a583a20760d0a583a20760d0a583a20760d0a583a20760d0a583a20760d0a583a20760d0a583a20760d0a583a20760d0a0d0a",
+        "repr": "POST / HTTP/1.1\\r\\nt:\\r\\n1:\\r\\n2:\\r\\n3:\\r\\n4:\\r\\n5:\\r\\n6:\\r\\n7:\\r\\n8:\\r\\n9:\\r\\nX:\\r\\nX:\\r\\nX:\\r\\nX:\\r\\nX:\\r\\nX:\\r\\nX:\\r\\nX: v\\r\\nX: v\\r\\nX: v\\r\\nX: v\\r\\nX: v\\r\\nX: v\\r\\nX: v\\r\\nX: v\\r\\nX: v\\r\\nX: v\\r\\nX: v\\r\\nX: v\\r\\nX: v\\r\\nX: v\\r\\nX: v\\r\\nX: v\\r\\n\\r\\n"
+      },
+      {
+        "label": "many-headers-40",
+        "hex": "504f5354202f20485454502f312e310d0a743a0d0a303a0d0a313a0d0a383a0d0a393a0d0a583a0d0a583a0d0a583a0d0a583a0d0a583a0d0a583a0d0a583a0d0a583a0d0a583a0d0a583a0d0a583a0d0a583a0d0a583a0d0a583a0d0a583a0d0a583a0d0a583a20760d0a583a20760d0a583a20760d0a583a20760d0a583a20760d0a583a20760d0a583a20760d0a583a20760d0a583a20760d0a583a20760d0a583a20760d0a583a20760d0a0d0a",
+        "repr": "POST / HTTP/1.1\\r\\nt:\\r\\n0:\\r\\n1:\\r\\n8:\\r\\n9:\\r\\nX:\\r\\nX:\\r\\nX:\\r\\nX:\\r\\nX:\\r\\nX:\\r\\nX:\\r\\nX:\\r\\nX:\\r\\nX:\\r\\nX:\\r\\nX:\\r\\nX:\\r\\nX:\\r\\nX:\\r\\nX:\\r\\nX: v\\r\\nX: v\\r\\nX: v\\r\\nX: v\\r\\nX: v\\r\\nX: v\\r\\nX: v\\r\\nX: v\\r\\nX: v\\r\\nX: v\\r\\nX: v\\r\\nX: v\\r\\n\\r\\n"
+      },
+      {
+        "label": "many-headers-64",
+        "hex": "504f5354202f20485454502f312e310d0a313a0d0a323a0d0a343a0d0a353a0d0a373a0d0a383a0d0a393a0d0a303a0d0a313a0d0a323a0d0a333a0d0a343a0d0a353a0d0a363a0d0a373a0d0a383a0d0a583a0d0a383a0d0a393a0d0a303a0d0a313a0d0a323a0d0a333a0d0a343a0d0a353a0d0a363a0d0a373a0d0a383a0d0a393a0d0a303a0d0a313a0d0a323a0d0a333a0d0a0d0a",
+        "repr": "POST / HTTP/1.1\\r\\n1:\\r\\n2:\\r\\n4:\\r\\n5:\\r\\n7:\\r\\n8:\\r\\n9:\\r\\n0:\\r\\n1:\\r\\n2:\\r\\n3:\\r\\n4:\\r\\n5:\\r\\n6:\\r\\n7:\\r\\n8:\\r\\nX:\\r\\n8:\\r\\n9:\\r\\n0:\\r\\n1:\\r\\n2:\\r\\n3:\\r\\n4:\\r\\n5:\\r\\n6:\\r\\n7:\\r\\n8:\\r\\n9:\\r\\n0:\\r\\n1:\\r\\n2:\\r\\n3:\\r\\n\\r\\n"
+      }
+    ]
+  }
+}

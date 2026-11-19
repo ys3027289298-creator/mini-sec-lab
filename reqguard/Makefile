@@ -9,5 +9,11 @@ reqguard: src/reqguard.c
 test: reqguard
 	./reqguard
 
+reqguard-diff: src/reqguard.c
+	$(CC) $(CFLAGS) -DREQGUARD_DIFF $< -o $@ -lcrypto
+
+diff: reqguard-diff
+	python3 -I diff/difftest.py
+
 clean:
-	rm -f reqguard
+	rm -f reqguard reqguard-diff

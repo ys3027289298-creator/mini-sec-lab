@@ -1,11 +1,15 @@
 
 /* reqguard: HTTP/1.1 request parsing hardened against request smuggling.
-   Rejects CL+TE, duplicate Content-Length, obs-fold, control chars,
-   over-long header lines and oversized buffers. */
+   Rejects CL+TE, duplicate Content-Length, non-digit/overflowing
+   Content-Length, non-chunked or duplicate Transfer-Encoding, obs-fold,
+   bare CR/LF outside CRLF pairs, control chars, over-long header lines
+   and oversized buffers. Differential-tested against Node llhttp:
+   see diff/difftest.py and diff/report.md. */
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
 #include <stdlib.h>
+#include <limits.h>
 
 #define MAX_HEADERS 32
 #define MAX_LINE 256
@@ -23,6 +27,7 @@ typedef enum {
     REQ_ERR_DUP_CL,
     REQ_ERR_CL_TE,
     REQ_ERR_BAD_CL,
+    REQ_ERR_BAD_TE,
     REQ_ERR_LINE_TOO_LONG,
     REQ_ERR_TOO_LARGE,
     REQ_ERR_TOO_MANY_HEADERS
@@ -38,6 +43,8 @@ typedef struct {
     int header_count;
     long content_length;   /* -1 when absent */
     int has_te;
+    int te_count;
+    char te_value[128];    /* first Transfer-Encoding value, trimmed */
 } Request;
 
 static const char* err_name(ReqErr e) {
@@ -52,6 +59,7 @@ static const char* err_name(ReqErr e) {
     case REQ_ERR_DUP_CL: return "dup_content_length";
     case REQ_ERR_CL_TE: return "cl_te_conflict";
     case REQ_ERR_BAD_CL: return "bad_content_length";
+    case REQ_ERR_BAD_TE: return "bad_transfer_encoding";
     case REQ_ERR_LINE_TOO_LONG: return "line_too_long";
     case REQ_ERR_TOO_LARGE: return "too_large";
     case REQ_ERR_TOO_MANY_HEADERS: return "too_many_headers";
@@ -105,6 +113,11 @@ static ReqErr parse_request(const char* buf, size_t len, Request* req) {
     for (size_t i = 0; i < len; i++) {
         unsigned char c = (unsigned char)buf[i];
         if (c == 0 || (c < 0x20 && c != '\r' && c != '\n' && c != '\t')) return REQ_ERR_CONTROL;
+        /* CR and LF are only legal as a CRLF pair: a bare CR or LF inside
+           a header value is a classic smuggling primitive (other parsers
+           treat it as a line break and see a different request). */
+        if (c == '\r' && (i + 1 >= len || buf[i + 1] != '\n')) return REQ_ERR_CONTROL;
+        if (c == '\n' && (i == 0 || buf[i - 1] != '\r')) return REQ_ERR_CONTROL;
     }
 
     size_t pos = 0;
@@ -148,6 +161,30 @@ static ReqErr parse_request(const char* buf, size_t len, Request* req) {
         *colon = 0;
         for (char* p = line; *p; p++) if (!is_token_char((unsigned char)*p)) return REQ_ERR_HEADER_SYNTAX;
 
+        int is_cl = ci_equal(line, "Content-Length");
+        int is_te = ci_equal(line, "Transfer-Encoding");
+
+        /* Content-Length is validated on the RAW value (before OWS trim):
+           llhttp-compatible grammar SP* DIGIT+ SP* — no tab, no sign,
+           no empty, no overflow. Anything else is a desync primitive. */
+        long cl_raw = -1;
+        if (is_cl) {
+            if (seen_cl) return REQ_ERR_DUP_CL;
+            const char* p = colon + 1;
+            while (*p == ' ') p++;
+            if (!isdigit((unsigned char)*p)) return REQ_ERR_BAD_CL;
+            long v = 0;
+            while (isdigit((unsigned char)*p)) {
+                int d = *p - '0';
+                if (v > (LONG_MAX - d) / 10) return REQ_ERR_BAD_CL;
+                v = v * 10 + d;
+                p++;
+            }
+            while (*p == ' ') p++;
+            if (*p != 0) return REQ_ERR_BAD_CL;
+            cl_raw = v;
+        }
+
         char* value = colon + 1;
         while (*value == ' ' || *value == '\t') value++;
         char* end = value + strlen(value);
@@ -156,19 +193,24 @@ static ReqErr parse_request(const char* buf, size_t len, Request* req) {
 
         if (req->header_count >= MAX_HEADERS) return REQ_ERR_TOO_MANY_HEADERS;
 
-        if (ci_equal(line, "Content-Length")) {
-            if (seen_cl) return REQ_ERR_DUP_CL;
+        if (is_cl) {
             seen_cl = 1;
-            char* ep = NULL;
-            long v = strtol(value, &ep, 10);
-            if (ep == value || (ep && *ep != 0) || v < 0) return REQ_ERR_BAD_CL;
-            req->content_length = v;
-        } else if (ci_equal(line, "Transfer-Encoding")) {
+            req->content_length = cl_raw;
+        } else if (is_te) {
+            /* only a single "Transfer-Encoding: chunked" is well-defined;
+               lists, other codings and duplicates are all desync-prone */
+            if (req->te_count > 0) return REQ_ERR_BAD_TE;
+            if (!ci_equal(value, "chunked")) return REQ_ERR_BAD_TE;
             req->has_te = 1;
+            req->te_count++;
+            strncpy(req->te_value, value, sizeof(req->te_value) - 1);
+            req->te_value[sizeof(req->te_value) - 1] = 0;
         }
 
         strncpy(req->headers[req->header_count].name, line, sizeof(req->headers[0].name) - 1);
+        req->headers[req->header_count].name[sizeof(req->headers[0].name) - 1] = 0;
         strncpy(req->headers[req->header_count].value, value, sizeof(req->headers[0].value) - 1);
+        req->headers[req->header_count].value[sizeof(req->headers[0].value) - 1] = 0;
         req->header_count++;
     }
 
@@ -176,6 +218,44 @@ static ReqErr parse_request(const char* buf, size_t len, Request* req) {
     return REQ_OK;
 }
 
+#ifdef REQGUARD_DIFF
+/* diff mode: read one raw request from stdin, print canonical fields.
+   Field separator '|', header separator \x1e, name/value separator \x1f.
+   Escapes: \\ \r \n \p('|') — control chars other than \r\n\t never
+   survive the parser, and \x1e/\x1f are rejected as control chars. */
+static void esc(const char* s) {
+    for (const unsigned char* p = (const unsigned char*)s; *p; p++) {
+        switch (*p) {
+        case '\\': printf("\\\\"); break;
+        case '\r': printf("\\r"); break;
+        case '\n': printf("\\n"); break;
+        case '|':  printf("\\p"); break;
+        default:   putchar(*p);
+        }
+    }
+}
+
+int main(void) {
+    static char buf[MAX_BUF + 2];
+    size_t n = fread(buf, 1, sizeof(buf), stdin);
+    if (n > MAX_BUF) n = MAX_BUF + 1; /* force too_large */
+    Request r;
+    ReqErr e = parse_request(buf, n, &r);
+    if (e != REQ_OK) { printf("ERR|%s\n", err_name(e)); return 0; }
+    printf("OK|m="); esc(r.method);
+    printf("|t="); esc(r.target);
+    printf("|v="); esc(r.version);
+    printf("|cl=%ld", r.content_length);
+    printf("|te=%d|tc=%d|tv=", r.has_te, r.te_count); esc(r.te_value);
+    printf("|h=");
+    for (int i = 0; i < r.header_count; i++) {
+        if (i) putchar('\x1e');
+        esc(r.headers[i].name); putchar('\x1f'); esc(r.headers[i].value);
+    }
+    putchar('\n');
+    return 0;
+}
+#else
 static int failures = 0;
 static void check(const char* name, int ok) {
     printf("%s=%d\n", name, ok ? 1 : 0);
@@ -198,6 +278,17 @@ int main(void) {
     check("bad_target", parse_str("GET a HTTP/1.1\r\n\r\n", &r) == REQ_ERR_TARGET);
     check("control_rejected", parse_str("GET /a\x01 HTTP/1.1\r\n\r\n", &r) == REQ_ERR_CONTROL);
     check("no_colon", parse_str("GET /a HTTP/1.1\r\nBadHeader\r\n\r\n", &r) == REQ_ERR_HEADER_SYNTAX);
+    check("bare_lf_value", parse_str("GET /a HTTP/1.1\r\nX: a\nInjected: 1\r\n\r\n", &r) == REQ_ERR_CONTROL);
+    check("bare_cr_value", parse_str("GET /a HTTP/1.1\r\nX: a\rb\r\n\r\n", &r) == REQ_ERR_CONTROL);
+    check("lf_only_request", parse_str("GET /a HTTP/1.1\nHost: x\n\n", &r) == REQ_ERR_CONTROL);
+    check("cl_plus_rejected", parse_str("POST /a HTTP/1.1\r\nContent-Length: +5\r\n\r\n", &r) == REQ_ERR_BAD_CL);
+    check("cl_tab_rejected", parse_str("POST /a HTTP/1.1\r\nContent-Length: 5\t\r\n\r\n", &r) == REQ_ERR_BAD_CL);
+    check("cl_overflow_rejected", parse_str("POST /a HTTP/1.1\r\nContent-Length: 9999999999999999999999999\r\n\r\n", &r) == REQ_ERR_BAD_CL);
+    check("cl_max_ok", parse_str("POST /a HTTP/1.1\r\nContent-Length: 9223372036854775807\r\n\r\n", &r) == REQ_OK && r.content_length == LONG_MAX);
+    check("te_identity_rejected", parse_str("POST /a HTTP/1.1\r\nTransfer-Encoding: identity\r\n\r\n", &r) == REQ_ERR_BAD_TE);
+    check("te_list_rejected", parse_str("POST /a HTTP/1.1\r\nTransfer-Encoding: gzip, chunked\r\n\r\n", &r) == REQ_ERR_BAD_TE);
+    check("te_dup_rejected", parse_str("POST /a HTTP/1.1\r\nTransfer-Encoding: chunked\r\nTransfer-Encoding: chunked\r\n\r\n", &r) == REQ_ERR_BAD_TE);
+    check("te_case_ok", parse_str("POST /a HTTP/1.1\r\nTransfer-Encoding: Chunked\r\n\r\n", &r) == REQ_OK && r.has_te);
 
     char big[MAX_BUF + 2];
     memset(big, 'A', sizeof(big));
@@ -207,3 +298,4 @@ int main(void) {
     printf("all_ok=%d\n", failures == 0);
     return failures == 0 ? 0 : 1;
 }
+#endif /* REQGUARD_DIFF */
