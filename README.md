@@ -5,5 +5,5 @@
 | 目录 | 内容 | 子方向 |
 |---|---|---|
 | `reqguard/` | HTTP/1.1 请求解析，防请求走私 | 网络与通信安全 |
-| `pathguard/` | 不可信路径的策略校验 | 系统安全 |
+| `pathguard/` | 不可信路径的策略校验 + seccomp/Landlock/capabilities/rlimit 沙箱 | 系统安全 |
 | `tokenauth/` | HMAC 令牌、常量时间比较、重放缓存、密钥轮转 | 身份认证 |
