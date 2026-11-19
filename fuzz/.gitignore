@@ -1,0 +1,7 @@
+# fuzz build artifacts
+fuzz-reqguard
+fuzz-pathguard
+fuzz-tokenauth
+fuzz-selftest
+corpus/
+out/
